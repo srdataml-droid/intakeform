@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Business Intake Form | Irenikase & Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B2A3A;
+    --navy-deep: #0F1A26;
+    --amber: #C7872E;
+    --paper: #FAF8F4;
+    --white: #FFFFFF;
+    --ink-soft: #5A6675;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--paper);
+    color: var(--navy-deep);
+    padding: 60px 20px;
+    line-height: 1.55;
+  }
+
+  .form-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .form-header { margin-bottom: 36px; }
+  .eyebrow {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .form-header h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.1rem);
+    margin-bottom: 10px;
+  }
+  .form-header p { color: var(--ink-soft); font-size: 1rem; }
+
+  form {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 36px;
+    border: 1px solid rgba(15,26,38,0.08);
+  }
+
+  fieldset {
+    border: none;
+    margin-bottom: 30px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(15,26,38,0.08);
+  }
+  fieldset:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  legend, .q-label {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .q-hint {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    font-weight: 400;
+    margin-top: -10px;
+    margin-bottom: 14px;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label.input-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .field input[type="text"],
+  .field input[type="email"],
+  .field input[type="tel"],
+  .field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid rgba(15,26,38,0.15);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    background: var(--paper);
+  }
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--amber);
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  /* Multiple-choice rows (radio + checkbox) */
+  .choice-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    cursor: pointer;
+  }
+  .choice-row input { margin-top: 3px; accent-color: var(--amber); width: 17px; height: 17px; flex-shrink: 0; }
+  .choice-row span { font-size: 0.95rem; }
+
+  .other-input {
+    margin-top: 4px;
+    margin-left: 27px;
+    display: none;
+  }
+  .other-input.active { display: block; }
+  .other-input input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid rgba(15,26,38,0.15);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    background: var(--paper);
+  }
+  .other-input input:focus { outline: none; border-color: var(--amber); }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .submit-btn:hover { background: var(--navy-deep); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .form-status { margin-top: 14px; font-size: 0.9rem; display: none; }
+  .form-status.success { color: #2E7D4F; display: block; }
+  .form-status.error { color: #B3432B; display: block; }
+
+  .hp-field { position: absolute; left: -9999px; top: -9999px; }
+
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="form-wrap">
+    <div class="form-header">
+      <div class="eyebrow">Quick intake</div>
+      <h1>Tell us about your business</h1>
+      <p>A few questions to help us understand what you do and what would actually be useful to you. Takes about 2 minutes.</p>
+    </div>
+
+    <form id="intake-form">
+
+      <!-- Business basics -->
+      <fieldset>
+        <label class="input-label" for="biz-name">Business name</label>
+        <input type="text" id="biz-name" name="business_name" required style="margin-bottom:16px;" />
+
+        <label class="input-label" for="biz-desc">What does your business do?</label>
+        <textarea id="biz-desc" name="business_description" placeholder="In a sentence or two..." required></textarea>
+      </fieldset>
+
+      <!-- Q: business type (single choice + other) -->
+      <fieldset>
+        <legend class="q-label">Which best describes your business?</legend>
+        <label class="choice-row">
+          <input type="radio" name="business_type" value="Retail / Product" />
+          <span>Retail / Product</span>
+        </label>
+        <label class="choice-row">
+          <input type="radio" name="business_type" value="Service Provider" />
+          <span>Service Provider</span>
+        </label>
+        <label class="choice-row">
+          <input type="radio" name="business_type" value="Consulting / Advisory" />
+          <span>Consulting / Advisory</span>
+        </label>
+        <label class="choice-row">
+          <input type="radio" name="business_type" value="Trade / Skilled Labor" />
+          <span>Trade / Skilled Labor (construction, repair, etc.)</span>
+        </label>
+        <label class="choice-row">
+          <input type="radio" name="business_type" id="biz-type-other-radio" value="Other" />
+          <span>Other</span>
+        </label>
+        <div class="other-input" id="biz-type-other-wrap">
+          <input type="text" name="business_type_other" placeholder="Tell us what kind of business" />
+        </div>
+      </fieldset>
+
+      <!-- Q: perks (multi choice + other) -->
+      <fieldset>
+        <legend class="q-label">What perks or benefits would matter most to you?</legend>
+        <p class="q-hint">Select all that apply.</p>
+
+        <label class="choice-row">
+          <input type="checkbox" name="perks" value="Discounted rates / pricing" />
+          <span>Discounted rates / pricing</span>
+        </label>
+        <label class="choice-row">
+          <input type="checkbox" name="perks" value="Priority support" />
+          <span>Priority support</span>
+        </label>
+        <label class="choice-row">
+          <input type="checkbox" name="perks" value="Flexible payment terms" />
+          <span>Flexible payment terms</span>
+        </label>
+        <label class="choice-row">
+          <input type="checkbox" name="perks" value="Free consultation / strategy session" />
+          <span>Free consultation / strategy session</span>
+        </label>
+        <label class="choice-row">
+          <input type="checkbox" name="perks" value="Referral rewards" />
+          <span>Referral rewards</span>
+        </label>
+        <label class="choice-row">
+          <input type="checkbox" name="perks" id="perks-other-check" value="Other" />
+          <span>Other</span>
+        </label>
+        <div class="other-input" id="perks-other-wrap">
+          <input type="text" name="perks_other" placeholder="What would you love to see?" />
+        </div>
+      </fieldset>
+
+      <!-- Contact details -->
+      <fieldset>
+        <label class="input-label" for="name">Your name</label>
+        <input type="text" id="name" name="name" required style="margin-bottom:16px;" />
+
+        <label class="input-label" for="email">Email</label>
+        <input type="email" id="email" name="email" required style="margin-bottom:16px;" />
+
+        <label class="input-label" for="phone">Phone (optional)</label>
+        <input type="tel" id="phone" name="phone" />
+      </fieldset>
+
+      <!-- Honeypot -->
+      <input type="text" name="_gotcha" class="hp-field" tabindex="-1" autocomplete="off" />
+
+      <button type="submit" class="submit-btn" id="submit-btn">Submit</button>
+      <div class="form-status" id="form-status"></div>
+    </form>
+  </div>
+
+  <script>
+    // Toggle "Other" text fields when their checkbox/radio is selected
+    function wireOtherToggle(triggerEl, wrapEl) {
+      const groupName = triggerEl.name;
+      document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
+        input.addEventListener('change', () => {
+          wrapEl.classList.toggle('active', triggerEl.checked);
+        });
+      });
+    }
+    wireOtherToggle(document.getElementById('biz-type-other-radio'), document.getElementById('biz-type-other-wrap'));
+    wireOtherToggle(document.getElementById('perks-other-check'), document.getElementById('perks-other-wrap'));
+
+    // ---------------------------------------------------------------
+    // Submission: same pattern as the company contact form — POST to
+    // Formspree as JSON-friendly FormData, no page reload needed.
+    // Checkbox group ("perks") submits multiple values under the same
+    // name; FormData naturally collects them all and Formspree lists
+    // them out in the email it sends.
+    // ---------------------------------------------------------------
+    const form = document.getElementById('intake-form');
+    const status = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Replace YOUR_FORM_ID with the ID from your Formspree dashboard
+    // (same account/setup as the main contact form: samuelirenikase@gmail.com)
+    const FORM_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+      status.className = 'form-status';
+      status.textContent = '';
+
+      const data = new FormData(form);
+
+      try {
+        const response = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          status.textContent = "Thanks — your answers have been submitted.";
+          status.className = 'form-status success';
+          form.reset();
+          document.querySelectorAll('.other-input').forEach(el => el.classList.remove('active'));
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (err) {
+        status.textContent = "Something went wrong. Please try again or email samuelirenikase@gmail.com directly.";
+        status.className = 'form-status error';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit';
+      }
+    });
+  </script>
+
+</body>
+</html>
